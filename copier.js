@@ -6,7 +6,7 @@ var Helper = Helper || {
     }
 }
 
-var LinkHandler = LinkHandler || {
+var LinkCopier = LinkCopier || {
     id: 'link-handler-container',
     off: true,
     target_selector: 'a',
@@ -38,8 +38,8 @@ var LinkHandler = LinkHandler || {
     },
 
     close: function() {
-        LinkHandler.reading = false
-        $("#" + LinkHandler.id).remove();
+        LinkCopier.reading = false
+        $("#" + LinkCopier.id).remove();
         $("body").removeClass("link-handler-container")
     },
 
@@ -51,23 +51,23 @@ var LinkHandler = LinkHandler || {
         var key = $("#link-handler-filter").val()
 
         if(key.length == 0) {
-            LinkHandler.filtered_links = LinkHandler.links
-            LinkHandler.render()
+            LinkCopier.filtered_links = LinkCopier.links
+            LinkCopier.render()
             return
         }
 
-        LinkHandler.filtered_links = []
+        LinkCopier.filtered_links = []
         key = key.toLowerCase()
-        $(LinkHandler.links).each(function(index, link) {
+        $(LinkCopier.links).each(function(index, link) {
             if(
                 link.text.toLowerCase().indexOf(key) != -1 ||
                 link.url.toLowerCase().indexOf(key) != -1
             ) {
-                LinkHandler.filtered_links.push(link)
+                LinkCopier.filtered_links.push(link)
             }
         })
 
-        LinkHandler.render()
+        LinkCopier.render()
     },
 
     init_events: function() {
@@ -79,7 +79,7 @@ var LinkHandler = LinkHandler || {
             $(".link-handler-box .key").click(function(){
                 var key = $(this).text()
                 $("#link-handler-filter").val(key).focus()
-                LinkHandler.filter()
+                LinkCopier.filter()
             })
             var clipboard = new Clipboard('.copy-action', {
                 text: function(trigger) {
@@ -101,10 +101,10 @@ var LinkHandler = LinkHandler || {
         $("#link-handler-filter").keyup(function(e) {
             console.log("key", e.keyCode)
             var key = $(this).val()
-            LinkHandler.filter()
+            LinkCopier.filter()
         })
 
-        LinkHandler.links = []
+        LinkCopier.links = []
         //get links
         $("a").each(function() {
             var $link = $(this)
@@ -117,15 +117,15 @@ var LinkHandler = LinkHandler || {
                 url.length > 10
             ) {
                 console.log("text", text, url)
-                LinkHandler.links.push({
+                LinkCopier.links.push({
                     text: text,
                     url: url
                 })
             }
 
         })
-        LinkHandler.filtered_links = LinkHandler.links
-        LinkHandler.render()
+        LinkCopier.filtered_links = LinkCopier.links
+        LinkCopier.render()
     },
 
     render: function() {
@@ -134,7 +134,7 @@ var LinkHandler = LinkHandler || {
         var texts = []
         var htmls = [
             '<ul>',
-            LinkHandler.filtered_links.map(function(link, index) {
+            LinkCopier.filtered_links.map(function(link, index) {
                 texts.push(link.url)
                 return '<li><span class="title" selectable="false">' + link.text + ":</span> <span class='url'>" + link.url + "</span></li>"
             }).join("\n"),
@@ -146,14 +146,14 @@ var LinkHandler = LinkHandler || {
 
     //private
     make_box: function() {
-        var keys = ["ed2k", "magnet"]
+        var keys = ["ed2k", "magnet", "thunder"]
         var keys_htmls = []
         $(keys).each(function(index, key){
             keys_htmls.push('<span class="key">'+key+'</span>')
         })
         var htmls = [
             '<div style="display:none"><textarea id="copy-target"></textarea></div>',
-            '<div id="' + LinkHandler.id + '" class="link-handler-box">',
+            '<div id="' + LinkCopier.id + '" class="link-handler-box">',
             '<div class="keys">',
                 keys_htmls.join(""),
                 '<span class="copy-action" data-clipboard-target="#copy-target">copy</span>',
@@ -168,4 +168,4 @@ var LinkHandler = LinkHandler || {
 
 }
 
-LinkHandler.toggle();
+LinkCopier.toggle();

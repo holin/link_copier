@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "LinkHandler",
+  "name": "LinkCopier",
   "description": "",
   "version": "0.01",
 
@@ -21,7 +21,7 @@
       "19": "assets/icon19_off.png",
       "38": "assets/icon38_off.png"
     },
-    "default_title": "LinkHandler"
+    "default_title": "LinkCopier"
     // "default_popup": "popup/popup.html"
   },
 

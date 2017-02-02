@@ -67,7 +67,7 @@ new (function($) {
 			);
 			chrome.tabs.executeScript(
 				null,
-				{file: "handler.js"}
+				{file: "copier.js"}
 			);
 
  		});
