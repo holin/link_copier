@@ -23,17 +23,17 @@ var LinkCopier = LinkCopier || {
         chrome.extension.sendMessage({
             is_off: this.off
         }, function(response) {
-            console.log(response);
+            // console.log(response);
         });
     },
 
     toggle: function() {
-        this.off = !this.off;
-        this.send_message();
+        LinkCopier.off = !LinkCopier.off;
+        LinkCopier.send_message();
         if(this.off) {
-            this.turn_off()
+            LinkCopier.turn_off()
         } else {
-            this.init_events()
+            LinkCopier.init_events()
         }
     },
 
@@ -44,7 +44,9 @@ var LinkCopier = LinkCopier || {
     },
 
     turn_off: function() {
-        this.close();
+        LinkCopier.off = true;
+        LinkCopier.send_message();
+        LinkCopier.close();
     },
 
     filter: function() {
@@ -90,6 +92,11 @@ var LinkCopier = LinkCopier || {
     init_events: function() {
         //addClass to body
         $("body").addClass("link-handler-container")
+        $("body").keyup(function(e){
+            if (e.keyCode == 27) {
+                LinkCopier.turn_off()
+            }
+        })
         this.make_box()
         setTimeout(function() {
             $("#link-handler-filter").focus()
@@ -126,7 +133,6 @@ var LinkCopier = LinkCopier || {
                 text.length > 0 &&
                 url.length > 10
             ) {
-                console.log("text", text, url)
                 LinkCopier.links.push({
                     text: text,
                     url: url
