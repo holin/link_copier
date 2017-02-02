@@ -70,13 +70,30 @@ var LinkCopier = LinkCopier || {
         LinkCopier.render()
     },
 
+    copy_text: function(text) {
+        var backup_text = $("#copy-target").val()
+        $("#copy-target").val(text)
+        $('.copy-action').trigger("click")
+        setTimeout(function() {
+            $("#copy-target").val(backup_text)
+        }, 500);
+    },
+
+    copied_tip: function() {
+        var $t = $(".copy-action").addClass("copied")
+        $t.text("copied!")
+        setTimeout(function() {
+            $t.text("copy").removeClass("copied")
+        }, 2000);
+    },
+
     init_events: function() {
         //addClass to body
         $("body").addClass("link-handler-container")
         this.make_box()
         setTimeout(function() {
             $("#link-handler-filter").focus()
-            $(".link-handler-box .key").click(function(){
+            $(".link-handler-box .filter-key").click(function(){
                 var key = $(this).text()
                 $("#link-handler-filter").val(key).focus()
                 LinkCopier.filter()
@@ -87,19 +104,12 @@ var LinkCopier = LinkCopier || {
                 }
             });
             clipboard.on('success', function(e) {
-                var $t = $(e.trigger).addClass("copied")
-                var text = $t.text()
-                $t.text("copied!")
-                setTimeout(function() {
-                    $t.text(text).removeClass("copied")
-                }, 2000);
-
+                LinkCopier.copied_tip()
             });
 
         }, 100);
 
         $("#link-handler-filter").keyup(function(e) {
-            console.log("key", e.keyCode)
             var key = $(this).val()
             LinkCopier.filter()
         })
@@ -136,25 +146,30 @@ var LinkCopier = LinkCopier || {
             '<ul>',
             LinkCopier.filtered_links.map(function(link, index) {
                 texts.push(link.url)
-                return '<li><span class="title" selectable="false">' + link.text + ":</span> <span class='url'>" + link.url + "</span></li>"
+                return '<li class="link-handler-item"><span class="title" selectable="false">' + link.text + ":</span> <br> <span class='url'>" + link.url + "</span></li>"
             }).join("\n"),
             '</ul>'
         ]
         $("#copy-target").val(texts.join("\n"))
         $container.html(htmls.join(""))
+
+        //dbl click copy
+        $(document).on("click", ".link-handler-item", function(){
+            LinkCopier.copy_text($(this).find(".url").text())
+        })
     },
 
     //private
     make_box: function() {
-        var keys = ["ed2k", "magnet", "thunder"]
+        var keys = ["ed2k", "magnet", "thunder", "qqdl"]
         var keys_htmls = []
         $(keys).each(function(index, key){
-            keys_htmls.push('<span class="key">'+key+'</span>')
+            keys_htmls.push('<span class="filter-key">'+key+'</span>')
         })
         var htmls = [
             '<div style="display:none"><textarea id="copy-target"></textarea></div>',
             '<div id="' + LinkCopier.id + '" class="link-handler-box">',
-            '<div class="keys">',
+            '<div class="filter-keys">',
                 keys_htmls.join(""),
                 '<span class="copy-action" data-clipboard-target="#copy-target">copy</span>',
             '</div>',
