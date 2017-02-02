@@ -1,0 +1,48 @@
+{
+  "manifest_version": 2,
+
+  "name": "LinkHandler",
+  "description": "",
+  "version": "0.01",
+
+  "icons": {
+    "16": "assets/icon16_off.png",
+    "48": "assets/icon48_off.png",
+    "128": "assets/icon128_off.png"
+  },
+
+  "permissions": [
+    "activeTab", "tabs", "http://*/*", "https://*/*", "file://*/*"
+  ],
+
+
+  "browser_action": {
+    "default_icon": {
+      "19": "assets/icon19_off.png",
+      "38": "assets/icon38_off.png"
+    },
+    "default_title": "LinkHandler"
+    // "default_popup": "popup/popup.html"
+  },
+
+  "web_accessible_resources": [
+    "assets/*.*"
+ ],
+
+  "background": {
+    "scripts": ["libs/jquery.min.js", "background.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*", "https://*/*", "file://*/*"
+      ],
+      "css": ["contentStyle.css"],
+      "js": [
+              "libs/jquery.min.js", "contentScript.js"
+            ]
+    }
+  ]
+}

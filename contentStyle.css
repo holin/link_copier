@@ -1,0 +1,77 @@
+.link-handler-container a:after {
+  content: "";
+}
+
+.link-handler-box {
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 580px;
+  z-index: 2147483647;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 0;
+}
+
+#link-handler-link-container {
+  width: 100%;
+  height: 460px;
+  overflow: auto;
+  font-size: 14px;
+}
+
+#link-handler-link-container li {
+  list-style: none;
+  line-height: 1.5em;
+}
+
+#link-handler-link-container li, #link-handler-link-container ul {
+  margin: 0;
+  padding-left: 10px;
+}
+
+#link-handler-link-container .url {
+  color: #aaa;
+}
+
+#link-handler-link-container .title {
+  color: #444;
+  user-select: none;
+}
+
+
+.link-handler-box input {
+  width: 100%;
+  height: 50px;
+  line-height: 49px;
+  font-size: 30px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.link-handler-box .key {
+  display: inline-block;
+  background: #eee;
+  padding: 1px 5px !important;
+  margin-right: 5px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.link-handler-box .copy-action {
+  display: inline-block;
+  background: #eee;
+  padding: 1px 5px !important;
+  border-radius: 2px;
+  cursor: pointer;
+  float: right;
+}
+
+
+.link-handler-box .copied {
+  color: orangered;
+}
+
+
