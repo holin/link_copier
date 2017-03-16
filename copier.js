@@ -12,6 +12,7 @@ var LinkCopier = LinkCopier || {
     target_selector: 'a',
     links: [],
     filtered_links: [],
+    vue_app: null,
 
     handle: function(elem) {
         this.current_zoom = 100;
@@ -114,6 +115,43 @@ var LinkCopier = LinkCopier || {
                 LinkCopier.copied_tip()
             });
 
+            var link_copier_app = new Vue({
+                el: '#link-copier-app',
+                data: {
+                    links: LinkCopier.links
+                },
+                methods: {
+                    checking: function() {
+                        this.update_links()
+                    },
+                    update_links: function() {
+                        console.log("links...")
+                        var texts = [], texts2 = [];
+                        $.each(this.links, function(index, link){
+                            if (link.checked) {
+                                texts.push(link.url)
+                            }
+                            texts2.push(link.url)
+                        })
+                        if (texts.length == 0) {
+                            texts = texts2
+                        }
+                        $("#copy-target").val(texts.join("\n"))
+                    }
+                },
+                watch: {
+                    links: function(new_links) {
+                        $.each(new_links, function(index, link){
+                            link.checked = false
+                        })
+                        this.update_links()
+                    }
+                }
+            })
+            LinkCopier.vue_app = link_copier_app
+            LinkCopier.vue_app.links = LinkCopier.filtered_links
+
+
         }, 100);
 
         $("#link-handler-filter").keyup(function(e) {
@@ -135,6 +173,7 @@ var LinkCopier = LinkCopier || {
             ) {
                 LinkCopier.links.push({
                     text: text,
+                    checked: false,
                     url: url
                 })
             }
@@ -145,24 +184,21 @@ var LinkCopier = LinkCopier || {
     },
 
     render: function() {
+        if (LinkCopier.vue_app) {
+            LinkCopier.vue_app.links = LinkCopier.filtered_links
+            return
+        }
+
         var $container = $("#link-handler-link-container")
         var $filter = $("#link-handler-filter")
         var texts = []
         var htmls = [
-            '<ul>',
-            LinkCopier.filtered_links.map(function(link, index) {
-                texts.push(link.url)
-                return '<li class="link-handler-item"><span class="title" selectable="false">' + link.text + ":</span> <br> <span class='url'>" + link.url + "</span></li>"
-            }).join("\n"),
-            '</ul>'
+            '<div id="link-copier-app"><ul>',
+            '<li v-for="link in links" class="link-handler-item"><input v-model="link.checked" @click="checking" style="width:15px;height:15px;" type="checkbox" ><span class="title" selectable="false">{{link.text}}:</span> <br> <span class="url">{{link.url}}</span></li>',
+            '</ul></div>'
         ]
-        $("#copy-target").val(texts.join("\n"))
-        $container.html(htmls.join(""))
 
-        //dbl click copy
-        $(document).on("click", ".link-handler-item", function(){
-            LinkCopier.copy_text($(this).find(".url").text())
-        })
+        $container.html(htmls.join(""))
     },
 
     //private

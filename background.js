@@ -63,6 +63,10 @@ new (function($) {
 			);
 			chrome.tabs.executeScript(
 				null,
+				{file: "libs/vue.js"}
+			);
+			chrome.tabs.executeScript(
+				null,
 				{file: "libs/clipboard.min.js"}
 			);
 			chrome.tabs.executeScript(
