@@ -163,7 +163,7 @@ var LinkCopier = LinkCopier || {
         //get links
         $("a").each(function() {
             var $link = $(this)
-            var text = $.trim($link.text().replace(/\s*/gi, " "))
+            var text = $.trim($link.text().replace(/\s+/gi, " "))
             var url = $link.attr("href")
             if(
                 text != undefined &&
