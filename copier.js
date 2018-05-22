@@ -59,15 +59,20 @@ var LinkCopier = LinkCopier || {
             return
         }
 
-        LinkCopier.filtered_links = []
-        key = key.toLowerCase()
-        $(LinkCopier.links).each(function(index, link) {
+        keys = key.toLowerCase().split(" ")
+
+        var tmp_filtered_links = LinkCopier.links;
+        $(keys).each(function(k, key) {
+          LinkCopier.filtered_links = []
+          $(tmp_filtered_links).each(function(index, link) {
             if(
                 link.text.toLowerCase().indexOf(key) != -1 ||
                 link.url.toLowerCase().indexOf(key) != -1
             ) {
                 LinkCopier.filtered_links.push(link)
             }
+          })
+          tmp_filtered_links = LinkCopier.filtered_links
         })
 
         LinkCopier.render()
