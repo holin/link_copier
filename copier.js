@@ -105,24 +105,24 @@ var LinkCopier = LinkCopier || {
         })
 
         // init selector
-        $("body").on("mouseenter", "div,ul,ol,section", function(e){
+        var selector = "div,ul,ol,section";
+        $("body").on("mouseenter", selector, function(e){
           e.stopPropagation()
           if ($(this).parents(".link-handler-box").length > 0) {
             return false;
           }
           $(".lc-over").removeClass("lc-over");
           $(this).addClass("lc-over");
-        }).on("mouseleave", "div,ul,ol,section", function(e){
+        }).on("mouseleave", selector, function(e){
           e.stopPropagation()
           $(this).removeClass("lc-over");
-        }).on("click", "div,ul,ol,section", function(e){
-          e.stopPropagation()
-          if ($(this).parents(".link-handler-box").length > 0) {
-            return false;
+        }).on("click", selector, function(e){
+          e.stopPropagation();
+          if ($(this).parents(".link-handler-box").length == 0) {
+            $(".lc-selected").removeClass("lc-selected");
+            $(this).addClass("lc-selected");
+            LinkCopier.pre_render();
           }
-          $(".lc-selected").removeClass("lc-selected");
-          $(this).addClass("lc-selected");
-          LinkCopier.pre_render();
         })
 
 
@@ -153,7 +153,6 @@ var LinkCopier = LinkCopier || {
                         this.update_links()
                     },
                     update_links: function() {
-                        console.log("links...")
                         var texts = [], texts2 = [];
                         $.each(this.links, function(index, link){
                             if (link.checked) {
@@ -197,7 +196,6 @@ var LinkCopier = LinkCopier || {
         if ($(".lc-selected").length > 0) {
           $links = $(".lc-selected a")
         }
-        console.log("$links", $links, $links.length)
         $links.each(function() {
             var $link = $(this)
             var text = $.trim($link.text().replace(/\s+/gi, " "))
