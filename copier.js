@@ -118,7 +118,7 @@ var LinkCopier = LinkCopier || {
           $(this).removeClass("lc-over");
         }).on("click", selector, function(e){
           e.stopPropagation();
-          if ($(this).parents(".link-handler-box").length == 0) {
+          if ($(this).parents(".link-handler-box").length == 0 && !$(this).is(".link-handler-box")) {
             $(".lc-selected").removeClass("lc-selected");
             $(this).addClass("lc-selected");
             LinkCopier.pre_render();
