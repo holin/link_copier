@@ -190,6 +190,7 @@ var LinkCopier = LinkCopier || {
     },
 
     pre_render: function() {
+      $("#link-handler-filter").val("");
       LinkCopier.links = []
         //get links
         $links = $("a")
