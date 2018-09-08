@@ -1,3 +1,14 @@
+.lc-over {
+  border: 1px solid rgb(168, 129, 129);
+  padding: 5px;
+}
+
+.lc-selected {
+  border: 1px solid rgb(184, 151, 151) !important;
+  padding: 5px;
+  background: #eee4e4 !important;
+}
+
 .link-handler-container a:after {
   content: "";
 }
@@ -69,6 +80,17 @@
   display: inline-block;
   background: #eee;
   padding: 1px 5px !important;
+  border-radius: 2px;
+  cursor: pointer;
+  float: right;
+}
+
+.link-handler-box .counter {
+  display: inline-block;
+  color: rgb(207, 89, 89);
+  background: #eee;
+  padding: 1px 5px !important;
+  margin-right: 10px;
   border-radius: 2px;
   cursor: pointer;
   float: right;

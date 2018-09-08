@@ -1,7 +1,7 @@
 var Helper = Helper || {
     clean: function(elem) {
         $(elem).removeAttr("style").removeAttr("class")
-        $(elem).find("div,p,ul,li,a,img").removeAttr("style").removeAttr("class")
+        $(elem).find("div,p,ul,li,a,img,ol").removeAttr("style").removeAttr("class")
         return elem
     }
 }
@@ -103,6 +103,29 @@ var LinkCopier = LinkCopier || {
                 LinkCopier.turn_off()
             }
         })
+
+        // init selector
+        $("body").on("mouseenter", "div,ul,ol,section", function(e){
+          e.stopPropagation()
+          if ($(this).parents(".link-handler-box").length > 0) {
+            return false;
+          }
+          $(".lc-over").removeClass("lc-over");
+          $(this).addClass("lc-over");
+        }).on("mouseleave", "div,ul,ol,section", function(e){
+          e.stopPropagation()
+          $(this).removeClass("lc-over");
+        }).on("click", "div,ul,ol,section", function(e){
+          e.stopPropagation()
+          if ($(this).parents(".link-handler-box").length > 0) {
+            return false;
+          }
+          $(".lc-selected").removeClass("lc-selected");
+          $(this).addClass("lc-selected");
+          LinkCopier.pre_render();
+        })
+
+
         this.make_box()
         setTimeout(function() {
             $("#link-handler-filter").focus()
@@ -146,10 +169,11 @@ var LinkCopier = LinkCopier || {
                 },
                 watch: {
                     links: function(new_links) {
-                        $.each(new_links, function(index, link){
-                            link.checked = false
-                        })
-                        this.update_links()
+                      $(".counter").html(new_links.length);
+                      $.each(new_links, function(index, link){
+                          link.checked = false
+                      })
+                      this.update_links()
                     }
                 }
             })
@@ -163,10 +187,18 @@ var LinkCopier = LinkCopier || {
             var key = $(this).val()
             LinkCopier.filter()
         })
+        LinkCopier.pre_render()
+    },
 
-        LinkCopier.links = []
+    pre_render: function() {
+      LinkCopier.links = []
         //get links
-        $("a").each(function() {
+        $links = $("a")
+        if ($(".lc-selected").length > 0) {
+          $links = $(".lc-selected a")
+        }
+        console.log("$links", $links, $links.length)
+        $links.each(function() {
             var $link = $(this)
             var text = $.trim($link.text().replace(/\s+/gi, " "))
             var url = $link.attr("href")
@@ -219,6 +251,7 @@ var LinkCopier = LinkCopier || {
             '<div class="filter-keys">',
                 keys_htmls.join(""),
                 '<span class="copy-action" data-clipboard-target="#copy-target">copy</span>',
+                '<span class="counter"></span>',
             '</div>',
             '<div><input type="text" id="link-handler-filter" ></div>',
             '<div id="link-handler-link-container"></div>',
